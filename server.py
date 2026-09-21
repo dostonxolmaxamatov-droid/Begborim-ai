@@ -218,6 +218,25 @@ class Handler(BaseHTTPRequestHandler):
         return ok
 
     def do_GET(self):
+        assets = {'/': ('index.html', 'text/html; charset=utf-8'),
+                  '/web.js': ('web.js', 'text/javascript; charset=utf-8'),
+                  '/web.css': ('web.css', 'text/css; charset=utf-8')}
+        if self.path in assets:
+            name, mime = assets[self.path]
+            target = Path(__file__).parent / name
+            if not target.is_file():
+                return self.send(404, {'error': 'Sahifa topilmadi.'})
+            body = target.read_bytes()
+            self.send_response(200)
+            self.send_header('Content-Type', mime)
+            self.send_header('Content-Length', str(len(body)))
+            self.send_header('Cache-Control', 'no-store')
+            self.send_header('X-Content-Type-Options', 'nosniff')
+            self.send_header('Referrer-Policy', 'no-referrer')
+            self.send_header('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'")
+            self.end_headers()
+            self.wfile.write(body)
+            return
         if self.path == '/healthz':
             return self.send(200, {'ok': True})
         if self.path.startswith('/media/'):

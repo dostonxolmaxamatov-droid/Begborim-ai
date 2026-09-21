@@ -29,6 +29,18 @@ class GatewayTest(unittest.TestCase):
             self.assertEqual(json.load(result.exception)['error'], 'Ulanish kodi noto‘g‘ri.')
         self.assertEqual(self.req('/health')[0], 200)
 
+    def test_public_studio_preserves_api_auth(self):
+        with urllib.request.urlopen(self.base + '/') as response:
+            self.assertEqual(response.status, 200)
+            self.assertIn(b'BEGBORIM AI', response.read())
+            self.assertIn("frame-ancestors 'none'", response.headers['Content-Security-Policy'])
+        for path in ('/web.js', '/web.css'):
+            with urllib.request.urlopen(self.base + path) as response:
+                self.assertEqual(response.status, 200)
+                self.assertEqual(response.headers['X-Content-Type-Options'], 'nosniff')
+        self.assertEqual(self.req('/jobs', auth=False)[0], 401)
+        self.assertEqual(self.req('/server.py', auth=False)[0], 401)
+
     def tearDown(self):
         self.http.shutdown()
         self.http.server_close()
