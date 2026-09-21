@@ -208,7 +208,11 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def auth(self):
-        ok = bool(TOKEN) and hmac.compare_digest(self.headers.get('Authorization', ''), 'Bearer ' + TOKEN)
+        supplied = self.headers.get('Authorization', '')
+        # compare_digest(str, str) rejects non-ASCII text. Reject malformed
+        # headers without raising or changing the constant-time token check.
+        ok = bool(TOKEN) and supplied.isascii() and hmac.compare_digest(
+            supplied.encode('utf-8'), ('Bearer ' + TOKEN).encode('utf-8'))
         if not ok:
             self.send(401, {'error': 'Ulanish kodi noto‘g‘ri.'})
         return ok
