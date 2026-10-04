@@ -9,7 +9,7 @@ from xml.sax.saxutils import escape
 import montage
 
 GEMINI_KEY=os.environ.get('GEMINI_API_KEY','')
-GEMINI_MODEL=os.environ.get('GEMINI_MODEL','gemini-3.8-flash')
+GEMINI_MODEL=os.environ.get('GEMINI_MODEL','')
 SPEECH_KEY=os.environ.get('AZURE_SPEECH_KEY','')
 SPEECH_REGION=os.environ.get('AZURE_SPEECH_REGION','')
 VOICES={'uz':('uz-UZ','uz-UZ-MadinaNeural'),'en':('en-US','en-US-JennyNeural')}
@@ -59,7 +59,7 @@ def speech(text,language,target):
     if not voice_ready() or language not in VOICES:raise ValueError('Ovoz xizmati ulanmagan.')
     locale,voice=VOICES[language]
     ssml=f'<speak version="1.0" xml:lang="{locale}"><voice name="{voice}">{escape(text)}</voice></speak>'
-    req=Request(f'https://{SPEECH_REGION}.tts.speech.microsoft.com/cognitiveservices/v1',data=ssml.encode(),headers={'Ocp-Apim-Subscription-Key':SPEECH_KEY,'Content-Type':'application/ssml+xml','X-Microsoft-OutputFormat':'riff-24khz-16bit-mono-pcm','User-Agent':'BegborimAI'})
+    req=Request(f'https://{SPEECH_REGION}.tts.speech.microsoft.com/cognitiveservices/v1',data=ssml.encode(),headers={'Ocp-Apim-Subscription-Key':SPEECH_KEY,'Content-Type':'application/ssml+xml','X-Microsoft-OutputFormat':'riff-24khz-16bit-mono-pcm','User-Agent':'ShirinAI'})
     with build_opener(NoRedirect).open(req,timeout=90) as r:
         data=r.read(16*1024*1024+1)
     if len(data)>16*1024*1024:raise ValueError('Ovoz hajmi juda katta.')

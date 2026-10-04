@@ -1,0 +1,15 @@
+.env
+.env.*
+!.env.example
+*.keystore
+*.jks
+*.apk
+*.idsig
+build/
+android/assets/
+__pycache__/
+*.pyc
+*.sqlite3*
+shirin-media/
+node_modules/
+verification/output/

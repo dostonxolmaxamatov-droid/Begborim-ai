@@ -1,0 +1,434 @@
+[
+  {
+    "id": "seedance25-i2v",
+    "name": "Seedance 2.5",
+    "type": "video",
+    "mode": "Rasmdan video",
+    "endpoint": "bytedance/seedance-2.5/image-to-video",
+    "fields": [
+      {
+        "key": "prompt",
+        "label": "Tavsif",
+        "type": "text",
+        "required": false
+      },
+      {
+        "key": "image_url",
+        "label": "Boshlang‘ich rasm",
+        "type": "image",
+        "required": true
+      },
+      {
+        "key": "end_image_url",
+        "label": "Oxirgi kadr (ixtiyoriy)",
+        "type": "image"
+      },
+      {
+        "key": "duration",
+        "label": "Davomiylik (soniya)",
+        "type": "number",
+        "min": 4,
+        "max": 30,
+        "default": 5
+      },
+      {
+        "key": "resolution",
+        "label": "Sifat",
+        "type": "select",
+        "options": [
+          "480p",
+          "720p",
+          "1080p"
+        ],
+        "default": "720p"
+      },
+      {
+        "key": "generate_audio",
+        "label": "Ovoz bilan yaratish",
+        "type": "boolean",
+        "default": true
+      }
+    ],
+    "source": "https://open.higgsfield.ai/models/bytedance/seedance-2.5/image-to-video/api-reference"
+  },
+  {
+    "id": "seedance25-t2v",
+    "name": "Seedance 2.5",
+    "type": "video",
+    "mode": "Matndan video",
+    "endpoint": "bytedance/seedance-2.5/text-to-video",
+    "fields": [
+      {
+        "key": "prompt",
+        "label": "Tavsif",
+        "type": "text",
+        "required": true
+      },
+      {
+        "key": "duration",
+        "label": "Davomiylik (soniya)",
+        "type": "number",
+        "min": 4,
+        "max": 30,
+        "default": 5
+      },
+      {
+        "key": "resolution",
+        "label": "Sifat",
+        "type": "select",
+        "options": [
+          "480p",
+          "720p",
+          "1080p"
+        ],
+        "default": "720p"
+      },
+      {
+        "key": "aspect_ratio",
+        "label": "Nisbat",
+        "type": "select",
+        "options": [
+          "9:16",
+          "16:9",
+          "1:1",
+          "4:3",
+          "3:4",
+          "21:9"
+        ],
+        "default": "9:16"
+      },
+      {
+        "key": "generate_audio",
+        "label": "Ovoz bilan yaratish",
+        "type": "boolean",
+        "default": true
+      }
+    ],
+    "source": "https://open.higgsfield.ai/models/bytedance/seedance-2.5/text-to-video/api-reference"
+  },
+  {
+    "id": "genjutsu-motion",
+    "name": "Genjutsu",
+    "type": "video",
+    "mode": "Harakat ko‘chirish",
+    "endpoint": "higgsfield/genjutsu/motion-transfer/v1.0",
+    "fields": [
+      {
+        "key": "prompt",
+        "label": "Tavsif",
+        "type": "text",
+        "required": false
+      },
+      {
+        "key": "video_url",
+        "label": "Harakat videosi · MP4, 4–30 soniya",
+        "type": "video",
+        "required": true
+      },
+      {
+        "key": "image_urls",
+        "label": "Reference rasmlar · 1–8",
+        "type": "images",
+        "required": true,
+        "max_items": 8
+      },
+      {
+        "key": "resolution",
+        "label": "Sifat",
+        "type": "select",
+        "options": [
+          "480p",
+          "720p",
+          "1080p"
+        ],
+        "default": "720p"
+      }
+    ],
+    "source": "https://open.higgsfield.ai/models/higgsfield/genjutsu/motion-transfer/v1.0/api-reference"
+  },
+  {
+    "id": "soul-v2",
+    "name": "Soul 2",
+    "type": "image",
+    "mode": "Matndan rasm",
+    "endpoint": "higgsfield-ai/soul/v2/standard",
+    "fields": [
+      {
+        "key": "prompt",
+        "label": "Tavsif",
+        "type": "text",
+        "required": true
+      },
+      {
+        "key": "resolution",
+        "label": "Sifat",
+        "type": "select",
+        "options": [
+          "720p",
+          "1080p"
+        ],
+        "default": "720p"
+      },
+      {
+        "key": "aspect_ratio",
+        "label": "Nisbat",
+        "type": "select",
+        "options": [
+          "9:16",
+          "16:9",
+          "4:3",
+          "3:4",
+          "1:1",
+          "2:3",
+          "3:2"
+        ],
+        "default": "9:16"
+      },
+      {
+        "key": "enhance_prompt",
+        "label": "Tavsifni yaxshilash",
+        "type": "boolean",
+        "default": true
+      },
+      {
+        "key": "seed",
+        "label": "Seed (ixtiyoriy)",
+        "type": "number",
+        "min": 1,
+        "max": 1000000
+      }
+    ],
+    "source": "https://open.higgsfield.ai/models/higgsfield-ai/soul/v2/standard/api-reference"
+  },
+  {
+    "id": "kling-video-v2.5-turbo-pro-image-to-video",
+    "name": "Kling 2.5 Pro",
+    "type": "video",
+    "mode": "Rasmdan video",
+    "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+    "fields": [
+      {
+        "key": "prompt",
+        "label": "Tavsif",
+        "type": "text",
+        "required": true
+      },
+      {
+        "key": "duration",
+        "label": "Davomiylik (soniya)",
+        "type": "number",
+        "required": false,
+        "default": 5,
+        "options": [
+          5,
+          10
+        ],
+        "integer": true,
+        "step": 1
+      },
+      {
+        "key": "cfg_scale",
+        "label": "Tavsifga moslik",
+        "type": "number",
+        "required": false,
+        "default": 0.5,
+        "min": 0,
+        "max": 1,
+        "integer": false,
+        "step": 0.01
+      },
+      {
+        "key": "image_url",
+        "label": "Boshlang‘ich rasm",
+        "type": "image",
+        "required": true
+      },
+      {
+        "key": "negative_prompt",
+        "label": "Kerak bo‘lmagan tafsilotlar",
+        "type": "text",
+        "required": false,
+        "default": ""
+      }
+    ],
+    "source": "https://open.higgsfield.ai/models/kling-video/v2.5-turbo/pro/image-to-video/api-reference"
+  },
+  {
+    "id": "kling-video-v2.5-turbo-pro-text-to-video",
+    "name": "Kling 2.5 Pro",
+    "type": "video",
+    "mode": "Matndan video",
+    "endpoint": "kling-video/v2.5-turbo/pro/text-to-video",
+    "fields": [
+      {
+        "key": "prompt",
+        "label": "Tavsif",
+        "type": "text",
+        "required": true
+      },
+      {
+        "key": "duration",
+        "label": "Davomiylik (soniya)",
+        "type": "number",
+        "required": false,
+        "default": 5,
+        "options": [
+          5,
+          10
+        ],
+        "integer": true,
+        "step": 1
+      },
+      {
+        "key": "cfg_scale",
+        "label": "Tavsifga moslik",
+        "type": "number",
+        "required": false,
+        "default": 0.5,
+        "min": 0,
+        "max": 1,
+        "integer": false,
+        "step": 0.01
+      },
+      {
+        "key": "negative_prompt",
+        "label": "Kerak bo‘lmagan tafsilotlar",
+        "type": "text",
+        "required": false,
+        "default": ""
+      }
+    ],
+    "source": "https://open.higgsfield.ai/models/kling-video/v2.5-turbo/pro/text-to-video/api-reference"
+  },
+  {
+    "id": "kling-video-v2.5-turbo-standard-image-to-video",
+    "name": "Kling 2.5 Standard",
+    "type": "video",
+    "mode": "Rasmdan video",
+    "endpoint": "kling-video/v2.5-turbo/standard/image-to-video",
+    "fields": [
+      {
+        "key": "prompt",
+        "label": "Tavsif",
+        "type": "text",
+        "required": true
+      },
+      {
+        "key": "duration",
+        "label": "Davomiylik (soniya)",
+        "type": "number",
+        "required": false,
+        "default": 5,
+        "options": [
+          5,
+          10
+        ],
+        "integer": true,
+        "step": 1
+      },
+      {
+        "key": "cfg_scale",
+        "label": "Tavsifga moslik",
+        "type": "number",
+        "required": false,
+        "default": 0.5,
+        "min": 0,
+        "max": 1,
+        "integer": false,
+        "step": 0.01
+      },
+      {
+        "key": "image_url",
+        "label": "Boshlang‘ich rasm",
+        "type": "image",
+        "required": true
+      },
+      {
+        "key": "negative_prompt",
+        "label": "Kerak bo‘lmagan tafsilotlar",
+        "type": "text",
+        "required": false,
+        "default": ""
+      }
+    ],
+    "source": "https://open.higgsfield.ai/models/kling-video/v2.5-turbo/standard/image-to-video/api-reference"
+  },
+  {
+    "id": "minimax-hailuo-2.3-standard-image-to-video",
+    "name": "Hailuo 2.3",
+    "type": "video",
+    "mode": "Rasmdan video",
+    "endpoint": "minimax/hailuo-2.3/standard/image-to-video",
+    "fields": [
+      {
+        "key": "prompt",
+        "label": "Tavsif",
+        "type": "text",
+        "required": true
+      },
+      {
+        "key": "duration",
+        "label": "Davomiylik (soniya)",
+        "type": "number",
+        "required": false,
+        "default": 6,
+        "options": [
+          6,
+          10
+        ],
+        "integer": true,
+        "step": 1
+      },
+      {
+        "key": "image_url",
+        "label": "Boshlang‘ich rasm",
+        "type": "image",
+        "required": true
+      },
+      {
+        "key": "prompt_optimizer",
+        "label": "Tavsifni yaxshilash",
+        "type": "boolean",
+        "required": false,
+        "default": true
+      }
+    ],
+    "source": "https://open.higgsfield.ai/models/minimax/hailuo-2.3/standard/image-to-video/api-reference"
+  },
+  {
+    "id": "minimax-hailuo-2.3-standard-text-to-video",
+    "name": "Hailuo 2.3",
+    "type": "video",
+    "mode": "Matndan video",
+    "endpoint": "minimax/hailuo-2.3/standard/text-to-video",
+    "fields": [
+      {
+        "key": "prompt",
+        "label": "Tavsif",
+        "type": "text",
+        "required": true
+      },
+      {
+        "key": "duration",
+        "label": "Davomiylik (soniya)",
+        "type": "number",
+        "required": false,
+        "default": 6,
+        "options": [
+          6,
+          10
+        ],
+        "integer": true,
+        "step": 1
+      },
+      {
+        "key": "prompt_optimizer",
+        "label": "Tavsifni yaxshilash",
+        "type": "boolean",
+        "required": false,
+        "default": true
+      }
+    ],
+    "source": "https://open.higgsfield.ai/models/minimax/hailuo-2.3/standard/text-to-video/api-reference"
+  }
+]
