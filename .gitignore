@@ -13,3 +13,14 @@ __pycache__/
 shirin-media/
 node_modules/
 verification/output/
+
+# Private credentials and build output
+*.keystore
+*.apk
+.env
+Shirin-Ulanish.json
+*connection*.json
+build/
+android/assets/
+__pycache__/
+*.sqlite3*

@@ -1,63 +1,132 @@
-# Shirin AI server · 0.1.0
+# Shirin · Android 0.1.1
 
-Android Shirin 0.1.0 uchun mustaqil, bir egali server va web studiya.
-Bu branch faqat Shirin serveri uchun; asosiy Begborim ilovasi boshqa branchda.
+Shirin — Android uchun mustaqil ijod studiyasi. Paket nomi `uz.shirin.ai`.
+Begborim ilovasidan alohida o‘rnatiladi. APK ichida server manzili tayyor. Shaxsiy ulanish kodi va pullik AI kaliti APK ichiga kiritilmagan.
 
-## Railway
+**Bu Higgsfieldning to‘liq nusxasi emas.** Shirin interfeysi va manba kodi berilgan;
+Higgsfieldning yopiq kodi, modellari va barcha sayt funksiyalari bu paketga kirmaydi.
+Qaysi imkoniyat mavjudligini [FEATURES.md](FEATURES.md) ko‘rsatadi.
 
-- Source: `shirin-server-0.1.0` branch, repozitoriyning ildizi.
-- Build: `Dockerfile`; Python 3.12, FFmpeg va FFprobe.
-- Healthcheck: `/healthz`.
-- Volume: `/data` — ishlar bazasi va yaratilgan media saqlanadi.
-- `SHIRIN_TOKEN`: kamida 32 belgili tasodifiy shaxsiy ulanish kodi.
-- `HF_KEY`: Higgsfield API hisobining `KEY_ID:KEY_SECRET` qiymati. Faqat serverda saqlanadi.
-- `PUBLIC_BASE_URL`: serverning HTTPS manzili. Railway domeni ham avtomatik aniqlanadi.
-- `SHIRIN_WORKERS=1`: ishlar navbat bilan bajariladi.
+## Telefonga o‘rnatish
 
-APK → Ulanish → Server manzili va `SHIRIN_TOKEN` qiymati → Saqlash va tekshirish.
-`/health` va API so‘rovlari shu tokenni talab qiladi. `/healthz` maxfiy ma’lumot bermaydi.
+1. `Shirin-0.1.1.apk` faylini Android 8.0 yoki yangiroq telefonda och.
+2. Telefon so‘rasa, faylni ochayotgan dasturga APK o‘rnatish ruxsatini ber.
+3. Shirin’ni och. Rasm tahriri, galereya va storyboard uchun server kerak emas.
+4. **Ulanish → Ulanish faylini ochish** orqali shaxsiy `Shirin-Ulanish.json` faylini tanla.
+   Server manzili va kod avtomatik tekshiriladi; muvaffaqiyatli bo‘lsa, shu qurilmada eslab qolinadi.
+5. Avvalgi Shirin 0.1.0 ni o‘chirmasdan APK ustidan yangila: paket nomi va imzo saqlangan.
+6. Haqiqiy AI yaratish uchun serverga Higgsfield API kaliti va API hisobida balans kerak.
 
-## Imkoniyat holati
+Android yangilanishi serverning 0.1.0 protokoli bilan mos. Tayyor ulanish fayli shaxsiy: uni ommaviy repozitoriyga qo‘shma.
 
-MP4 montaj FFmpeg bilan serverda bajariladi. Haqiqiy rasm jonlantirish uchun
-Higgsfield API kaliti, modelga kirish va yetarli API balansi kerak. Kalit yo‘q
-bo‘lsa AI so‘rovi rad etiladi; slayd-videoga avtomatik almashtirilmaydi.
-API xizmati pulli bo‘lishi mumkin; ilova yuborishdan oldin rozilik so‘raydi.
+Galereya ilova ma’lumotlarida saqlanadi. Muhim ishlarni `Yuklash` yoki Androiddagi
+`Telefon galereyasiga` tugmasi orqali alohida saqla. Ilova ma’lumotlarini o‘chirish
+ichki galereya va qoralamalarni ham o‘chiradi. Qurilmalararo bulut sinxronlash yo‘q.
 
-Ko‘p foydalanuvchili akkauntlar va to‘lov tizimi bu serverga kirmaydi.
-Server qayta ishga tushsa davom etayotgan ish INTERRUPTED holatiga o‘tadi;
-qayta pulli so‘rov yuborishdan oldin providerda uning holatini tekshirish kerak.
+## Haqiqiy AI’ni ulash
 
-## Tekshirish
+Ikki xil kalitning vazifasi alohida:
+
+| Qiymat | Qayerga qo‘yiladi | Vazifasi |
+| --- | --- | --- |
+| `SHIRIN_TOKEN` | Server va ilovadagi “Ulanish kodi” | O‘z Shirin serveringga kirish |
+| `HF_KEY` | Faqat server muhiti | Higgsfield API’ga murojaat; `KEY_ID:KEY_SECRET` shaklida |
+
+Higgsfield API hisobida modelga ruxsat va yetarli balans bo‘lishi kerak.
+Higgsfield saytidagi obuna/creditlar va API balansi alohida.
+Kalitlar ushbu arxivda yo‘q; ularni chatga yoki APK kodiga yozma.
+
+1. [Higgsfield API hisobida](https://open.higgsfield.ai/) kalit yarat.
+2. Ushbu manba kodining `server/` qismini o‘z serveringda ishga tushir.
+3. Server muhitida `HF_KEY` va kamida 32 belgili tasodifiy `SHIRIN_TOKEN` sozla.
+4. Tashqi manzil HTTPS bo‘lsin. `PUBLIC_BASE_URL` aynan shu manzil bo‘lsin.
+5. Ilovada **Ulanish → Server manzili** maydoniga shu HTTPS manzilni yoz.
+6. **Ulanish kodi** maydoniga aynan `SHIRIN_TOKEN` qiymatini kirit.
+7. **Saqlash va tekshirish** ni bos. Server “Ulangan”, AI “Sozlangan” bo‘lishi kerak.
+8. **Yaratish** bo‘limida model va reference tanla, tavsif yoz, API xarajatiga
+   rozilikni belgilab, avval qisqa video bilan sinab ko‘r.
+
+“Sozlangan” — kalit borligini bildiradi. Hisob balansi yoki haqiqiy generatsiya
+muvaffaqiyati oldindan tasdiqlanganini anglatmaydi. Bu nashrda jonli pullik AI
+generatsiyasi sinovdan o‘tkazilmadi.
+
+### Kompyuterda mahalliy ishga tushirish
+
+Python 3.12 va FFmpeg/FFprobe kerak. Ishlash uchun Python paketlari shart emas.
 
 ```bash
-python3 -m pip install -r requirements-dev.txt
-python3 -m unittest discover -s server -p 'test_*.py' -v
+cd server
+python3 server.py
 ```
 
-Sinovlar provider javoblarini taqlid qiladi; haqiqiy pulli generatsiya alohida tekshiriladi.
-Kalitlar, .env, imzolash fayllari va foydalanuvchi media fayllarini GitHub‘ga yuklamang.
+Brauzerda `http://127.0.0.1:8080` ochiladi. Faqat localhost rejimida kodsiz ishlaydi.
+AI uchun `HF_KEY` muhit o‘zgaruvchisini jarayonni boshlashdan oldin sozla.
+Android APK tashqi serverga xavfsiz HTTPS orqali ulanadi; kompyuterning localhost
+manzili telefonda o‘sha kompyuterni anglatmaydi.
 
-## Railway Docker image orqali joylashtirish
+### Docker bilan server
 
-GitHub integratsiyasi ulanmagan bo‘lsa, rasmiy `python:3.12-slim-bookworm`
-image ishlatilishi mumkin. `deploy/package_image.py` shu branchdagi 16 ta
-runtime faylni tekshiriladigan, siqilgan paketga aylantiradi. Buyruq JSON
-formatida image, startCommand va servisga qo‘yiladigan variables qaytaradi.
-Unda shaxsiy kalit yo‘q; `SHIRIN_TOKEN` alohida beriladi.
-
-`deploy/image_bootstrap.py` paketning SHA-256 qiymatini tekshiradi, FFmpeg
-va shriftlarni rasmiy Debian omboridan o‘rnatadi, keyin serverni ishga tushiradi.
-Birinchi start uchun healthcheck timeout 600 soniya. Doimiy volume `/data`
-manzilida ulanadi. Ishlar bitta workerda bajariladi; 512 MB server uchun
-bir so‘rov yuklamasi 32 MB. Eski APK yig‘ish xizmatidan qolgan imzolash
-kalitlari va boshqa o‘zgaruvchilar Shirin jarayoniga uzatilmaydi.
+`.env.example` faylini `.env` nomiga nusxala, namunadagi qiymatlarni almashtir.
+Token yaratish uchun kompyuteringda `python3 -c 'import secrets; print(secrets.token_urlsafe(32))'`
+buyrug‘idan foydalanish mumkin. `.env` ni ommaviy repozitoriyga qo‘shma.
 
 ```bash
-python3 -m unittest discover -s deploy -p 'test_*.py' -v
-python3 deploy/package_image.py > /tmp/shirin-image-config.json
+docker build -t shirin-ai .
+docker volume create shirin-data
+docker run -d --name shirin --restart unless-stopped \
+  -p 127.0.0.1:8080:8080 --env-file .env \
+  -v shirin-data:/data shirin-ai
 ```
 
-Bu usul tarif limitlarini o‘zgartirmaydi va pulli AI kalitini bermaydi.
-Ishga tushirishdan oldin Railway staged changes tarkibini ko‘rib chiqing;
-tasdiqlanmaguncha servis va volume jonli holatda o‘zgarmaydi.
+Telefon uchun server oldiga o‘z domening bilan HTTPS reverse proxy qo‘y.
+`/healthz` faqat server ishga tushganini ko‘rsatadi. `/health` token bilan tekshiriladi.
+Railway uchun `Dockerfile` va `railway.json` ham mavjud; `/data` doimiy diskka
+biriktirilishi kerak. APK hosting yaratmaydi; ushbu nashrga tayyor Shirin serverining ochiq manzili biriktirilgan.
+
+Server bir egali shaxsiy foydalanish uchun. Ko‘p foydalanuvchili ro‘yxatdan o‘tish,
+alohida hisoblar, to‘lov sotish va foydalanuvchilarni ajratish kiritilmagan.
+
+## Xato yuz bersa
+
+| Xabar / holat | Nima tekshiriladi |
+| --- | --- |
+| “Ulanish kodi bo‘sh/noto‘g‘ri” | Ilovaga serverdagi `SHIRIN_TOKEN` qiymatini yoz; `HF_KEY` ni emas. |
+| “Bu Shirin serveri emas” | Eski Begborim URL o‘rniga shu koddan ishga tushirilgan Shirin serveri kerak. |
+| “Serverga ulanib bo‘lmadi” | HTTPS manzil, sertifikat, domen va server logini tekshir. |
+| “Higgsfield API kaliti qabul qilinmadi” | Serverdagi ID va secret juftligini tekshir. |
+| Balans / ruxsat / limit xabari | API hisobidagi aynan tanlangan modelni tekshir. |
+| “Oxirgi so‘rovni tekshirish” | Shu tugmani bos; bir xil ish uchun yana pullik so‘rov yuborilmaydi. |
+| Server qayta ishga tushdi / 30 daqiqa o‘tdi | API konsolida avvalgi ishni tekshir. Avtomatik yangi generatsiya yuborilmaydi. |
+
+Server qayta ishga tushganda davom etayotgan AI ish avtomatik tiklanmaydi.
+Provider kvitansiyasi `SHIRIN_MEDIA/<job-id>/hf-receipt.json` da saqlanadi.
+Providerda ish davom etishi mumkin; yangi generatsiyadan oldin uning holatini tekshir.
+
+## APK’ni qayta yig‘ish
+
+Android SDK platform 35, Build Tools 35.0.0, JDK, `zip` va `bash` kerak.
+
+```bash
+ANDROID_SDK_ROOT=/sdk/manzili bash build.sh
+```
+
+ECJ ishlatilsa `ECJ_JAR=/ecj.jar/manzili` ni ham ber. Natija `Shirin-AI.apk`.
+`development.keystore` — aynan berilgan APK imzo kaliti; uni shaxsiy nusxada saqla.
+Keyingi yangilanishlar shu kalit bilan imzolanishi va `versionCode` oshirilishi kerak.
+Kalit/parollar demo tarqatish uchun; do‘konga chiqarishdan oldin alohida release
+imzolash tartibini tayyorla. Imzo kalitini ommaga joylashtirma.
+
+## Tekshiruv va manbalar
+
+[TESTING.md](TESTING.md) — bajarilgan va bajarilmagan tekshiruvlar.
+Model endpointlari va parametrlar `server/hf-models.json` da, har birining rasmiy
+API hujjati `source` maydonida ko‘rsatilgan.
+
+- [API va sayt obunasining farqi](https://higgsfield.ai/creator-hub/help-center/integrations/what-is-the-higgsfield-api)
+- [Autentifikatsiya](https://docs.higgsfield.ai/docs/authentication)
+- [So‘rovlar va natijalar](https://docs.higgsfield.ai/docs/concepts/requests)
+- [Fayl yuklash](https://docs.higgsfield.ai/docs/concepts/file-uploads)
+- [Bir so‘rovni takrorlamaslik](https://docs.higgsfield.ai/docs/concepts/idempotency)
+
+Hujjatlar 2026-10-03 kuni tekshirildi. Xizmat keyinchalik o‘zgarsa, model
+konfiguratsiyasi yangilanishi mumkin.
