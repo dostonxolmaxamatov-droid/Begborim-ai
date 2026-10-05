@@ -61,3 +61,17 @@ python3 deploy/package_image.py > /tmp/shirin-image-config.json
 Bu usul tarif limitlarini o‘zgartirmaydi va pulli AI kalitini bermaydi.
 Ishga tushirishdan oldin Railway staged changes tarkibini ko‘rib chiqing;
 tasdiqlanmaguncha servis va volume jonli holatda o‘zgarmaydi.
+
+## Mavjud OpenAI sozlamasini ulash
+
+`OPENAI_API_KEY`, `OPENAI_CHAT_MODEL`, `OPENAI_IMAGE_MODEL` va
+`OPENAI_TTS_MODEL` serverda saqlanadi. Railway reference variables yordamida
+o‘zingizning boshqa servisingizdagi sozlamani kalitni nusxalamasdan ulash mumkin.
+Masalan, `OPENAI_CHAT_MODEL=${{begborim-server.OPENAI_MODEL}}`.
+
+`deploy/check_openai.py` pre-deploy tekshiruvi faqat OpenAI model ro‘yxatini
+o‘qiydi: kalit qabul qilinishi va tanlangan chat, rasm, ovoz modellari mavjudligini
+tekshiradi. Hech qanday generatsiya yaratmaydi, kalit va xom javobni logga
+chiqarmaydi. Tekshiruv muvaffaqiyatsiz bo‘lsa, yangi deployment to‘xtaydi.
+Bu sinov balansni, generatsiya kvotasini yoki endpointga alohida ruxsatni
+tasdiqlamaydi. Bularni haqiqiy foydalanishdagi provider javobi aniqlaydi.
