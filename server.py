@@ -12,6 +12,7 @@ import shutil
 from pathlib import Path
 import montage
 import storyboard
+import agents
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.request import Request, HTTPRedirectHandler, build_opener
 from urllib.error import HTTPError
@@ -32,6 +33,8 @@ def init_db():
     Path(DB).parent.mkdir(parents=True, exist_ok=True)
     with sqlite3.connect(DB) as db:
         db.execute('CREATE TABLE IF NOT EXISTS jobs (id TEXT PRIMARY KEY, payload TEXT NOT NULL)')
+
+    agents.init(DB)
 
 def save(job):
     with sqlite3.connect(DB) as db:
@@ -220,6 +223,7 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         assets = {'/': ('index.html', 'text/html; charset=utf-8'),
                   '/web.js': ('web.js', 'text/javascript; charset=utf-8'),
+                  '/agents.js': ('agents.js', 'text/javascript; charset=utf-8'),
                   '/web.css': ('web.css', 'text/css; charset=utf-8')}
         if self.path in assets:
             name, mime = assets[self.path]
@@ -258,6 +262,13 @@ class Handler(BaseHTTPRequestHandler):
             return
         if not self.auth():
             return
+        if self.path == '/agents':
+            return self.send(200, dict(agents.settings(), agents=agents.CATALOG))
+        if self.path == '/agent-runs':
+            return self.send(200, {'runs': agents.recent(DB)})
+        if self.path.startswith('/agent-runs/'):
+            run = agents.get(DB, self.path[12:])
+            return self.send(200, run) if run else self.send(404, {'error': 'Ish topilmadi.'})
         if self.path == '/health':
             return self.send(200, {'configured': bool(KEY), 'name': 'Begborim AI', 'montage': montage_ready(), 'max_images':15, 'max_duration':30, 'image_text':storyboard.vision_ready(), 'voice_languages':['uz','en'] if storyboard.voice_ready() else []})
         if self.path == '/jobs':
@@ -295,6 +306,19 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
         if not self.auth():
             return
+        if self.path == '/agent-runs' or (self.path.startswith('/agent-runs/') and self.path.endswith('/cancel')):
+            try:
+                n = int(self.headers.get('Content-Length', '0'))
+                if not 0 < n <= 40000:
+                    return self.send(413, {'error': 'So‘rov hajmi noto‘g‘ri.'})
+                data = json.loads(self.rfile.read(n))
+                if self.path.endswith('/cancel'):
+                    return self.send(200, agents.cancel(DB, self.path[12:-7]))
+                return self.send(200, agents.submit(DB, data))
+            except agents.RequestError as exc:
+                return self.send(exc.code, {'error': exc.message})
+            except (ValueError, TypeError):
+                return self.send(400, {'error': 'Vazifa yoki agentlar noto‘g‘ri.'})
         if self.path != '/jobs':
             return self.send(404, {'error': 'Topilmadi.'})
         if not KEY:
@@ -351,6 +375,7 @@ if __name__ == '__main__':
     if len(TOKEN) < 32:
         raise SystemExit('Set BEGBORIM_TOKEN to a random secret of at least 32 characters.')
     init_db()
+    agents.init(DB, recover=True)
     # A process crash during submission leaves an explicitly uncertain job.
     with sqlite3.connect(DB) as db:
         for (payload,) in db.execute('SELECT payload FROM jobs').fetchall():
